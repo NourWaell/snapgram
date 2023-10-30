@@ -2,14 +2,14 @@ import { sidebarLinks } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 import { INavLink } from "@/types";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
+import Loader from "./Loader";
 
 const LeftSidebar = () => {
-  const { mutate: signOut, isSuccess } = useSignOutAccount();
+  const { mutate: signOut, isPending: isLoggingOut } = useSignOutAccount();
   const { user } = useUserContext();
   const { pathname } = useLocation();
-  const navigate = useNavigate();
 
   return (
     <nav className="leftsidebar">
@@ -71,7 +71,9 @@ const LeftSidebar = () => {
         onClick={() => signOut()}
       >
         <img src="/assets/icons/logout.svg" alt="logout" />
-        <p className="small-medium lg:base-medium">Logout</p>
+        <p className="small-medium lg:base-medium">
+          {isLoggingOut ? <Loader /> : "Logout"}
+        </p>
       </Button>
     </nav>
   );
